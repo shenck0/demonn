@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="demonn_core.h" />
+    <ClInclude Include="basic.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="basic_layer.h">
+      <Filter>layers</Filter>
+    </ClInclude>
+    <ClInclude Include="activation.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="blas.hpp">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="tensor.hpp">
+      <Filter>layers</Filter>
+    </ClInclude>
+    <ClInclude Include="loss.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="training.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="initializer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="layers">
+      <UniqueIdentifier>{63e34548-1a8a-49a1-81c8-4ce528189ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{067f41bd-3322-4b89-a85a-c7ed6a27d733}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="basic.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="basic_layer.cpp">
+      <Filter>layers</Filter>
+    </ClCompile>
+    <ClCompile Include="activation.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="loss.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="training.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="initializer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
