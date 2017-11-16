@@ -24,6 +24,7 @@
     <ClInclude Include="basic_layer.h" />
     <ClInclude Include="blas.hpp" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="conv.h" />
     <ClInclude Include="demonn_core.h" />
     <ClInclude Include="initializer.h" />
     <ClInclude Include="loss.h" />
@@ -35,6 +36,7 @@
     <ClCompile Include="basic.cpp" />
     <ClCompile Include="basic_layer.cpp" />
     <ClCompile Include="common.cpp" />
+    <ClCompile Include="conv.cpp" />
     <ClCompile Include="initializer.cpp" />
     <ClCompile Include="loss.cpp" />
     <ClCompile Include="training.cpp" />

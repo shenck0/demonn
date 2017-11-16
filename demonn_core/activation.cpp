@@ -48,17 +48,16 @@ namespace demonn_core {
         const float* grad_input,
         float* grad_output
     ) {
+        memset(grad_output, 0, sizeof(float) * batch_size * class_num);
         for (int bi = 0; bi < batch_size; bi++) {
             const int batch_offset = bi * class_num;
             const float* cur_softmax_output = softmax_output + batch_offset;
             const float* cur_grad_input = grad_input + batch_offset;
             float* cur_grad_output = grad_output + batch_offset;
             for (int i = 0; i < class_num; i++) {
-                float sum = 0.0F;
                 for (int j = 0; j < class_num; j++) {
-                    sum += cur_grad_input[j] * (i == j ? (cur_softmax_output[i] * (1 - cur_softmax_output[j])) : (-cur_softmax_output[i] * cur_softmax_output[j]));
+                    cur_grad_output[i] += cur_grad_input[j] * (i == j ? (cur_softmax_output[i] * (1 - cur_softmax_output[j])) : (-cur_softmax_output[i] * cur_softmax_output[j]));
                 }
-                cur_grad_output[i] = sum;
             }
         }
     }

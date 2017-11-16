@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BA4A92C0-7DEF-4B0C-AB2B-19929BE576CE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SimpleTest</RootNamespace>
+    <RootNamespace>MNISTExample</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,10 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SimpleTest.cpp" />
+    <ClCompile Include="fc_network.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mnist_helper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mnist_helper.hpp" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="mnist_helper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

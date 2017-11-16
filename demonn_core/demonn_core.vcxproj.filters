@@ -29,6 +29,9 @@
     <ClInclude Include="initializer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="conv.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="layers">
@@ -58,6 +61,9 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="initializer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="conv.cpp">
       <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>

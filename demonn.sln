@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demonn_core", "demonn_core\demonn_core.vcxproj", "{629ADA2E-5D67-4F7B-9FFE-78A2A705900D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleTest", "tester\SimpleTest\SimpleTest.vcxproj", "{BA4A92C0-7DEF-4B0C-AB2B-19929BE576CE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MNISTExample", "examples\MNISTExample\MNISTExample.vcxproj", "{BA4A92C0-7DEF-4B0C-AB2B-19929BE576CE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{629ADA2E-5D67-4F7B-9FFE-78A2A705900D} = {629ADA2E-5D67-4F7B-9FFE-78A2A705900D}
 	EndProjectSection

@@ -1,32 +1,32 @@
-# Prerequisites
 *.d
-
-# Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
-
-# Precompiled Headers
 *.gch
 *.pch
-
-# Compiled Dynamic libraries
+*.idb
+*.pdb
+*.vspx
+*.tlog
+*.opendb
+*.VC.VC.opendb
+*.db
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
 *.mod
 *.smod
-
-# Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
-
-# Executables
 *.exe
 *.out
 *.app
+
+.vs
+x64/
+x86/
+Debug/
+Release/
