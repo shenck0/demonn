@@ -5,6 +5,7 @@
 #include "basic.h"
 #include "activation.h"
 #include "loss.h"
+#include "conv.h"
 #include "training.h"
 #include "initializer.h"
 
