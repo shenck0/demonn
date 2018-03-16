@@ -19,5 +19,8 @@
       <Filter>gtest</Filter>
     </ClCompile>
     <ClCompile Include="test_conv.cpp" />
+    <ClCompile Include="test_activation.cpp" />
+    <ClCompile Include="test_basic.cpp" />
+    <ClCompile Include="test_loss.cpp" />
   </ItemGroup>
 </Project>

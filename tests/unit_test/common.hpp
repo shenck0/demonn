@@ -11,4 +11,9 @@ public:
         return std::shared_ptr<float>(ret, std::default_delete<float[]>());
     }
 
+    static void check_float_array(const float* A, const float* B, const int count) {
+        for (int i = 0; i < count; i++)
+            EXPECT_FLOAT_EQ(A[i], B[i]);
+    }
+
 };

@@ -25,7 +25,10 @@
   <ItemGroup>
     <ClCompile Include="..\gtest\gtest-all.cpp" />
     <ClCompile Include="..\gtest\gtest_main.cc" />
+    <ClCompile Include="test_activation.cpp" />
+    <ClCompile Include="test_basic.cpp" />
     <ClCompile Include="test_conv.cpp" />
+    <ClCompile Include="test_loss.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F5B118A-1FD8-44DD-B49F-4F09A781294C}</ProjectGuid>

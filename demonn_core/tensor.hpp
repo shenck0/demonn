@@ -43,8 +43,8 @@ namespace demonn {
         }
 
     private:
-        tensor(const tensor&);
-        tensor& operator=(const tensor&);
+        tensor(const tensor&) { }
+        tensor& operator=(const tensor&) { }
     };
 
 }

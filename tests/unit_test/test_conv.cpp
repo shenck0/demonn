@@ -1,11 +1,11 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include <demonn_core.h>
 #include "common.hpp"
 
 namespace d = demonn;
 namespace dc = demonn_core;
 
-TEST(conv_forward, create_desc_1) {
+TEST(conv, create_desc_1) {
     auto desc = dc::create_conv2d_descriptor(1, 3, 3, 2, 2, 1);
     EXPECT_EQ(2, desc.filter_height);
     EXPECT_EQ(2, desc.output_height);
@@ -14,7 +14,7 @@ TEST(conv_forward, create_desc_1) {
     EXPECT_NE(nullptr, desc.im2col_buffer);
 }
 
-TEST(conv_forward, simple_1) {
+TEST(conv, simple_forward) {
     auto desc = dc::create_conv2d_descriptor(1, 3, 3, 2, 2, 1);
     float input[] = {
         1, 2, 3,
@@ -38,5 +38,13 @@ TEST(conv_forward, simple_1) {
     for (int i = 0; i < 4; i++) {
         EXPECT_FLOAT_EQ(output_check[i], output[i]);
     }
+
+}
+
+TEST(conv, simple_forward_stride) {
+
+}
+
+TEST(conv, simple_forward_padding) {
 
 }
