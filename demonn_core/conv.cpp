@@ -107,7 +107,7 @@ namespace demonn_core {
                 desc.output_channel,
                 1,
                 desc.output_height * desc.output_width,
-                1.0F
+                1.0f
             );
         }
     }

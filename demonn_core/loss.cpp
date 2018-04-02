@@ -8,12 +8,12 @@ namespace demonn_core {
         const float* label,
         float* output_loss
     ) {
-        *output_loss = 0.0F;
+        *output_loss = 0.0f;
         for (int bi = 0; bi < batch_size; bi++) {
             const float* cur_label = label + bi * class_num;
             const float* cur_predict = predict + bi * class_num;
             for (int ci = 0; ci < class_num; ci++) {
-                if (cur_label[ci] != 0.0F)
+                if (cur_label[ci] != 0.0f)
                     *output_loss -= cur_label[ci] * logf(cur_predict[ci]);
             }
         }
@@ -25,7 +25,7 @@ namespace demonn_core {
         const float* label,
         float* grad_output
     ) {
-        float batch_scale = 1.0F / (float)batch_size;
+        float batch_scale = 1.0f / (float)batch_size;
         for (int i = 0; i < batch_size * class_num; i++) {
             grad_output[i] = -batch_scale * label[i] / predict[i];
         }

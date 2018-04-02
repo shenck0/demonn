@@ -7,7 +7,7 @@ namespace demonn_core {
     void relu_forward(const float* input, int batch_size, int input_neuron,
         float* output) {
         for (int i = 0; i < batch_size*input_neuron; i++)
-            output[i] = std::max(input[i], 0.0F);
+            output[i] = std::max(input[i], 0.0f);
     }
 
     void relu_backward(
@@ -16,7 +16,7 @@ namespace demonn_core {
         float* grad_output
     ) {
         for (int i = 0; i < batch_size*neuron_num; i++) {
-            grad_output[i] = (before_relu[i] >= 0.0F) ? grad_input[i] : 0.0F;
+            grad_output[i] = (before_relu[i] >= 0.0f) ? grad_input[i] : 0.0f;
         }
     }
 
@@ -38,7 +38,7 @@ namespace demonn_core {
         exp(output, output, batch_size * class_num);
         for (int i = 0; i < batch_size; i++) {
             float* out = output + class_num * i;
-            float scale = 1.0F / cblas_sasum(class_num, out, 1);
+            float scale = 1.0f / cblas_sasum(class_num, out, 1);
             cblas_sscal(class_num, scale, out, 1);
         }
     }

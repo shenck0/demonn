@@ -16,7 +16,7 @@ namespace demonn_core {
             memcpy(output, bias, sizeof(float) * output_neuron);
         else
             gemm(bias_multiplier, bias, output, batch_size, 1, output_neuron);
-        gemm(input, weight, output, batch_size, input_neuron, output_neuron, 1.0F);
+        gemm(input, weight, output, batch_size, input_neuron, output_neuron, 1.0f);
     }
 
     void fully_connected_backward(
@@ -53,18 +53,18 @@ namespace demonn_core {
         float* output) {
         memset(output, 0, sizeof(float) * batch_size * class_num);
         for (int i = 0; i < batch_size; i++)
-            output[class_num * i + labels[i]] = 1.0F;
+            output[class_num * i + labels[i]] = 1.0f;
     }
 
     float mean(const float* arr, int count) {
-        float sum = 0.0F;
+        float sum = 0.0f;
         for (int i = 0; i < count; i++)
             sum += arr[i];
         return sum / count;
     }
 
     void set_array(float* arr, float value, int count) {
-        if (value == 0.0F) {
+        if (value == 0.0f) {
             memset(arr, 0, sizeof(float) * count);
         } else {
             for (int i = 0; i < count; i++)

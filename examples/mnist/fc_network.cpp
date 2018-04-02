@@ -20,10 +20,10 @@ int main_fc_network(int argc, char* argv[])
     auto w2 = d::tensor::get<float>({ 500, MNIST_CLASS_NUM });
     auto b2 = d::tensor::get<float>({ MNIST_CLASS_NUM });
     // initialize weights
-    dc::normal_distribution(w1->data(), w1->size, 0.0F, 0.01F);
-    dc::normal_distribution(w2->data(), w2->size, 0.0F, 0.001F);
-    dc::set_array(b1->data(), 0.0F, b1->size);
-    dc::set_array(b2->data(), 0.0F, b2->size);
+    dc::normal_distribution(w1->data(), w1->size, 0.0f, 0.01f);
+    dc::normal_distribution(w2->data(), w2->size, 0.0f, 0.001f);
+    dc::set_array(b1->data(), 0.0f, b1->size);
+    dc::set_array(b2->data(), 0.0f, b2->size);
     
     // Train
     {
@@ -31,16 +31,16 @@ int main_fc_network(int argc, char* argv[])
         auto e2 = e1;
         int train_epoch = 10;
         int train_batch_size = 64;
-        float learning_rate = 0.01F;
+        float learning_rate = 0.01f;
         auto in = d::tensor::get<float>({ train_batch_size, 784 });
         auto fc1 = d::tensor::get<float>({ train_batch_size, 500 });
         auto relu1 = d::tensor::get<float>({ train_batch_size, 500 });
         auto fc2 = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
         auto s1 = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
         auto label = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
-        float loss = 0.0F;
+        float loss = 0.0f;
         auto bias_multiplier = d::tensor::get<float>({ train_batch_size });
-        dc::set_array(bias_multiplier->data(), 1.0F, train_batch_size);
+        dc::set_array(bias_multiplier->data(), 1.0f, train_batch_size);
 
         vector<shared_ptr<float> > train_images;
         vector<int> train_labels;

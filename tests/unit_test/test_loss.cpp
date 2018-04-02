@@ -5,6 +5,10 @@
 namespace d = demonn;
 namespace dc = demonn_core;
 
-TEST(suite_name, sub_name) {
-    EXPECT_EQ(1, 2);
+TEST(loss, cross_entropy_forward) {
+    //TODO: implement
+}
+
+TEST(loss, cross_entropy_backward) {
+    //TODO: gradient check
 }

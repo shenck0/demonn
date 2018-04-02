@@ -36,7 +36,7 @@ int mnist_load_images_file(const char* path, std::vector<auto_float>& dst, bool 
             next[p] = (float)buf[p];
         if (normailize) {
             for (int p = 0; p < MNIST_VECTOR_LEN; p++)
-                next[p] = (next[p] - 127.5F) * (1.0F / 127.5F);
+                next[p] = (next[p] - 127.5f) * (1.0f / 127.5f);
         }
         dst.emplace_back(next, std::default_delete<float[]>());
     }
