@@ -2,13 +2,13 @@
 #include <tuple>
 #include <random>
 #include <algorithm>
-#include <demonn_core.h>
+#include <demonn.h>
 
 #include "mnist_helper.h"
 
 using namespace std;
 namespace d = demonn;
-namespace dc = demonn_core;
+namespace dc = demonn;
 
 int main_fc_network(int argc, char* argv[])
 {
@@ -38,6 +38,7 @@ int main_fc_network(int argc, char* argv[])
         auto fc2 = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
         auto s1 = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
         auto label = d::tensor::get<float>({ train_batch_size, MNIST_CLASS_NUM });
+        auto err = d::tensor::get<float>({ train_batch_size });
         float loss = 0.0f;
         auto bias_multiplier = d::tensor::get<float>({ train_batch_size });
         dc::set_array(bias_multiplier->data(), 1.0f, train_batch_size);
@@ -60,19 +61,22 @@ int main_fc_network(int argc, char* argv[])
                 dc::relu_forward(fc1->data(), train_batch_size, 500, relu1->data()); // relu1
                 dc::fully_connected_forward(relu1->data(), train_batch_size, 500, w2->data(), b2->data(), bias_multiplier->data(), fc2->data(), MNIST_CLASS_NUM); // fc2
                 dc::softmax_forward(fc2->data(), train_batch_size, MNIST_CLASS_NUM, s1->data()); // softmax
-                dc::cross_entropy_forward(s1->data(), train_batch_size, MNIST_CLASS_NUM, label->data(), &loss);
+                dc::cross_entropy_forward(s1->data(), train_batch_size, MNIST_CLASS_NUM, label->data(), err->data());
+                dc::mean_forward(err->data(), train_batch_size, &loss);
                 cout << "epoch=" << epoch << " batch=" << batch << " loss=" << loss << endl;
                 // Backward propagation
-                dc::cross_entropy_backward(s1->data(), train_batch_size, MNIST_CLASS_NUM, label->data(), s1->grad());
+                float loss_weight = 1.0f;
+                dc::mean_backward(train_batch_size, &loss_weight, err->grad());
+                dc::cross_entropy_backward(s1->data(), train_batch_size, MNIST_CLASS_NUM, label->data(), err->grad(), s1->grad());
                 dc::softmax_backward(s1->data(), train_batch_size, MNIST_CLASS_NUM, s1->grad(), fc2->grad());
-                dc::fully_connected_backward(relu1->data(), train_batch_size, 500, MNIST_CLASS_NUM, w2->data(), bias_multiplier->data(), b2->grad(), w2->grad(), fc2->grad(), relu1->grad());
+                dc::fully_connected_backward(relu1->data(), train_batch_size, 500, MNIST_CLASS_NUM, w2->data(), bias_multiplier->data(), fc2->grad(), b2->grad(), w2->grad(), relu1->grad());
                 dc::relu_backward(fc1->data(), train_batch_size, 500, relu1->grad(), fc1->grad());
-                dc::fully_connected_backward(in_ptr, train_batch_size, MNIST_VECTOR_LEN, 500, w1->data(), bias_multiplier->data(), b1->grad(), w1->grad(), fc1->grad(), in->grad());
+                dc::fully_connected_backward(in_ptr, train_batch_size, MNIST_VECTOR_LEN, 500, w1->data(), bias_multiplier->data(), fc1->grad(), b1->grad(), w1->grad(), in->grad());
                 // Update weights
-                dc::stochastic_gradient_descent(w1->data(), w1->size, w1->grad(), learning_rate);
-                dc::stochastic_gradient_descent(b1->data(), b1->size, b1->grad(), learning_rate);
-                dc::stochastic_gradient_descent(w2->data(), w2->size, w2->grad(), learning_rate);
-                dc::stochastic_gradient_descent(b2->data(), b2->size, b2->grad(), learning_rate);
+                dc::stochastic_gradient_descent(w1->grad(), w1->size, learning_rate, w1->data());
+                dc::stochastic_gradient_descent(b1->grad(), b1->size, learning_rate, b1->data());
+                dc::stochastic_gradient_descent(w2->grad(), w2->size, learning_rate, w2->data());
+                dc::stochastic_gradient_descent(b2->grad(), b2->size, learning_rate, b2->data());
             }
         }
     }

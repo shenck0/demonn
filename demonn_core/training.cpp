@@ -1,14 +1,19 @@
-#include "training.h"
-#include <mkl_cblas.h>
+﻿#include "training.h"
+#ifdef compile_implement_mkl
+    #include <mkl_cblas.h>
+#endif
 
-namespace demonn_core {
+namespace demonn {
 
-    void stochastic_gradient_descent(
-        float* weight, int count,
-        const float* grad,
-        float learning_rate
+    void op(sgd, plain, none, cpu, mkl)(
+        int n,
+        const float* grad_weight, // (n,)
+        float learning_rate, 
+        float* weight // (n,)
     ) {
-        cblas_saxpy(count, -learning_rate, grad, 1, weight, 1);
+#ifdef compile_implement_mkl
+        cblas_saxpy(n, -learning_rate, grad_weight, 1, weight, 1);
+#endif
     }
 
 }

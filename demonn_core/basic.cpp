@@ -1,74 +1,109 @@
-#include <cstring>
+﻿#include <cstring>
 #include <algorithm>
 #include "basic.h"
-#include "blas.hpp"
+#include "blas.h"
 
-namespace demonn_core {
+namespace demonn {
 
-    void fully_connected_forward(
-        const float* input, int batch_size, int input_neuron,
-        const float* weight, const float* bias,
-        const float* bias_multiplier,
-        float* output, int output_neuron
+    void op(fully_connected, mm, forward, cpu, mkl)(
+        int batch_size, 
+        int input_neuron,
+        const float* input, // (batch_size, input_neuron)
+        int output_neuron,
+        const float* weight, // (input_neuron, output_neuron)
+        const float* bias, // (output_neuron,)
+        const float* bias_multiplier, // (batch_size,)
+        float* output // (batch_size, output_neuron)
     ) {
-        check(bias_multiplier != NULL || batch_size == 1);
-        if (batch_size == 1)
-            memcpy(output, bias, sizeof(float) * output_neuron);
-        else
-            gemm(bias_multiplier, bias, output, batch_size, 1, output_neuron);
-        gemm(input, weight, output, batch_size, input_neuron, output_neuron, 1.0f);
+        gemm_mkl(
+            bias_multiplier, false,
+            bias, false,
+            batch_size, output_neuron, 1,
+            1.0f, 0.0f,
+            output
+        );
+        gemm_mkl(
+            input, false,
+            weight, false,
+            batch_size, output_neuron, input_neuron,
+            1.0f, 0.0f,
+            output
+        );
     }
 
-    void fully_connected_backward(
-        const float* fc_input, int batch_size, int input_neuron, int output_neuron,
-        const float* weight,
-        const float* bias_multiplier,
-        float* bias_grad,
-        float* grad_weight,
-        const float* grad_input,
-        float* grad_output
+    void op(fully_connected, mm, backward, cpu, mkl)(
+        int batch_size, 
+        int input_neuron,
+        int output_neuron,
+        const float* input, // (batch_size, input_neuron)
+        const float* weight, // (input_neuron, output_neuron)
+        const float* bias_multiplier, // at least:(batch_size,)
+        const float* grad_output, // (batch_size, output_neuron)
+        float* grad_bias, // (output_neuron,)
+        float* grad_weight, // (input_neuron, output_neuron)
+        float* grad_input // (batch_size, input_neuron)
     ) {
-        gemm_trans_a(grad_input, bias_multiplier, bias_grad, output_neuron, batch_size, 1); // bias_grad = (batch_size x output_neuron)' * (batch_size x 1)
-        gemm_trans_b(grad_input, weight, grad_output, batch_size, output_neuron, input_neuron); // grad_output = (batch_size x output_neuron) * (input_neuron x output_neuron)'
-        gemm_trans_a(fc_input, grad_input, grad_weight, input_neuron, batch_size, output_neuron); // grad_weight = (batch_size x input_num)' * (batch_size x output_num)
+        gemm_mkl(
+            grad_output, true,
+            bias_multiplier, false,
+            output_neuron, 1, batch_size,
+            1.0f, 0.0f,
+            grad_bias
+        );
+        gemm_mkl(
+            grad_output, false,
+            weight, true,
+            batch_size, input_neuron, output_neuron,
+            1.0f, 0.0f,
+            grad_input
+        );
+        gemm_mkl(
+            input, true,
+            grad_output, false,
+            input_neuron, output_neuron, batch_size,
+            1.0f, 0.0f,
+            grad_weight
+        );
     }
 
-}
-
-namespace demonn_core {
-
-    int argmax(float* arr, int n) {
-        int ret = 0;
-        float val = arr[0];
-        for (int i = 1; i < n; i++) {
-            if (arr[i] > val) {
-                val = arr[i];
-                ret = i;
-            }
-        }
-        return ret;
-    }
-
-    void onehot(const int* labels, int batch_size, int class_num,
-        float* output) {
-        memset(output, 0, sizeof(float) * batch_size * class_num);
-        for (int i = 0; i < batch_size; i++)
-            output[class_num * i + labels[i]] = 1.0f;
-    }
-
-    float mean(const float* arr, int count) {
-        float sum = 0.0f;
+    void op(mean, direct, forward, cpu, cpp)(
+        int count,
+        const float* input, // (count,)
+        float* output // (1,)
+    ) {
+        *output = 0.0f;
         for (int i = 0; i < count; i++)
-            sum += arr[i];
-        return sum / count;
+            *output += input[i];
+        *output /= count;
     }
 
-    void set_array(float* arr, float value, int count) {
-        if (value == 0.0f) {
-            memset(arr, 0, sizeof(float) * count);
-        } else {
-            for (int i = 0; i < count; i++)
-                arr[i] = value;
+    void op(mean, direct, backward, cpu, cpp)(
+        int count,
+        const float* grad_output, // (1,)
+        float* grad_input // (count,)
+    ) {
+        const float scale = 1.0f / count;
+        for (int i = 0; i < count; i++) {
+            grad_input[i] = grad_output[0] * scale;
+        }
+    }
+
+    void op(argmax, direct, forward, cpu, cpp)(
+        int batch_size,
+        int n,
+        const float* input, // (batch_size, n)
+        int* output// (batch_size,)
+    ) {
+        for (int bi = 0; bi < batch_size; bi++) {
+            const float* cur_arr = input + bi * n;
+            int & ret = output[bi] = 0;
+            float val = cur_arr[0];
+            for (int i = 1; i < n; i++) {
+                if (cur_arr[i] > val) {
+                    val = cur_arr[i];
+                    ret = i;
+                }
+            }
         }
     }
 

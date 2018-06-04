@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+namespace d = demonn;
+
 class TestCommon {
 public:
     static std::shared_ptr<float> get_bias_multiplier(int count) {

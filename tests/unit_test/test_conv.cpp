@@ -1,21 +1,17 @@
 #include <gtest/gtest.h>
-#include <demonn_core.h>
+#include <demonn.h>
 #include "common.hpp"
 
 namespace d = demonn;
-namespace dc = demonn_core;
 
-TEST(conv, create_desc_1) {
-    auto desc = dc::create_conv2d_descriptor(1, 3, 3, 2, 2, 1);
-    EXPECT_EQ(2, desc.filter_height);
+TEST(conv, conv2d_descriptor) {
+    d::conv2d_descriptor desc(3, 3, 1, 3, 2, 2, 0, 0, 0, 0, 1, 1);
     EXPECT_EQ(2, desc.output_height);
     EXPECT_EQ(2, desc.output_width);
-    EXPECT_NE(nullptr, desc.im2col_index);
-    EXPECT_NE(nullptr, desc.im2col_buffer);
 }
 
-TEST(conv, simple_forward) {
-    auto desc = dc::create_conv2d_descriptor(1, 3, 3, 2, 2, 1);
+TEST(conv, conv2d_im2col_forward_cpu_mkl) {
+    d::conv2d_descriptor desc(3, 3, 1, 1, 2, 2, 0, 0, 0, 0, 1, 1);
     float input[] = {
         1, 2, 3,
         4, 0, 4,
@@ -30,21 +26,11 @@ TEST(conv, simple_forward) {
     };
     float output[4];
     auto bias_multiplier = TestCommon::get_bias_multiplier(4);
-    dc::conv2d_forward(desc, input, 1, filter, bias, bias_multiplier.get(), output);
+    d::conv2d_im2col_res res(desc);
+    d::conv2d_im2col_forward_cpu_mkl(desc, res, 1, input, filter, bias, output);
     float output_check[4] = {
         2, 10,
         1, 7
     };
-    for (int i = 0; i < 4; i++) {
-        EXPECT_FLOAT_EQ(output_check[i], output[i]);
-    }
-
-}
-
-TEST(conv, simple_forward_stride) {
-
-}
-
-TEST(conv, simple_forward_padding) {
-
+    TestCommon::check_float_array(output_check, output, 4);
 }

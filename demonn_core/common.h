@@ -1,17 +1,22 @@
-#pragma once
+﻿#pragma once
 #include <stdio.h>
+#include "demonn_config.h"
 
 #ifdef _MSC_VER
-    #define EXPORT_SYMBOL __declspec(dllexport)
+    #define export_symbol __declspec(dllexport)
 #else
-    #define EXPORT_SYMBOL __attribute((visibility("default")))
+    #define export_symbol __attribute((visibility("default")))
 #endif
+
+// Function naming
+#define op(function, algorithm, direction, platform, implement) \
+    function ## _ ## algorithm ## _ ## direction ## _ ## platform ## _ ## implement
 
 // Helper macros
 #define check(expr) \
     do{ \
         if(!(expr)){ \
-            printf("exception at %s L%d\n", __FILE__, __LINE__); \
+            printf("check failed @file:%s line:%d expr:%s\n", __FILE__, __LINE__, #expr); \
             throw -1; \
         } \
     } while(0)

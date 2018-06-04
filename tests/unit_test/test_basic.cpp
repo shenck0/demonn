@@ -1,16 +1,15 @@
 #include <gtest/gtest.h>
-#include <demonn_core.h>
+#include <demonn.h>
 #include "common.hpp"
 
-namespace d = demonn;
-namespace dc = demonn_core;
-
-TEST(basic, argmax) {
+TEST(basic, argmax_direct_forward_cpu_cpp) {
     float arr[] = { 5.0f, 1.0f, 3.0f, 4.0f, 2.0f };
-    EXPECT_EQ(0, dc::argmax(arr, 5));
+    int ret;
+    d::argmax_direct_forward_cpu_cpp(1, 5, arr, &ret);
+    EXPECT_EQ(0, ret);
 }
 
-TEST(basic, onehot) {
+TEST(basic, fill_onehot) {
     int labels[] = { 1, 2, 0 };
     float outputs[9];
     float answer[] = {
@@ -18,11 +17,13 @@ TEST(basic, onehot) {
         0.0f, 0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,
     };
-    dc::onehot(labels, 3, 3, outputs);
+    d::fill_onehot(3, 3, labels, outputs);
     TestCommon::check_float_array(outputs, answer, 9);
 }
 
-TEST(basic, mean) {
+TEST(basic, mean_direct_forward_cpu_cpp) {
     float input[] = { -1.0f, 1.0f, 3.0f };
-    EXPECT_FLOAT_EQ(1.0f, dc::mean(input, 3));
+    float output;
+    d::mean_direct_forward_cpu_cpp(3, input, &output);
+    EXPECT_FLOAT_EQ(1.0f, output);
 }

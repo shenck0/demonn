@@ -1,18 +1,57 @@
-#include "demonn_core.h"
-#include <mkl.h>
-#include <mkl_vsl.h>
+﻿#include "demonn.h"
 #include <ctime>
+#include <random>
 
-namespace demonn_core {
+namespace demonn {
 
-    void normal_distribution(
-        float* data, int count,
-        float mean, float std
+    class _random_res {
+    public:
+        std::random_device* rd;
+        std::mt19937* gen;
+        _random_res() {
+            rd = new std::random_device{};
+            gen = new std::mt19937{ (*rd)() };
+        }
+        ~_random_res() {
+            delete gen;
+            delete rd;
+        }
+    };
+
+    void fill_onehot(
+        int batch_size,
+        int n,
+        const int* label, // (batch_size,)
+        float* output // (batch_size, n)
     ) {
-        VSLStreamStatePtr stream;
-        vslNewStream(&stream, VSL_BRNG_SFMT19937, (unsigned long long)clock());
-        vsRngGaussian(VSL_RNG_METHOD_GAUSSIAN_ICDF, stream, count, data, mean, std);
-        vslDeleteStream(&stream);
+        memset(output, 0, sizeof(float) * batch_size * n);
+        for (int i = 0; i < batch_size; i++)
+            output[n * i + label[i]] = 1.0f;
+    }
+
+    void fill_constant(
+        int count,
+        float value,
+        float* output // (count,)
+    ) {
+        if (value == 0.0f) {
+            memset(output, 0, sizeof(float) * count);
+        } else {
+            for (int i = 0; i < count; i++)
+                output[i] = value;
+        }
+    }
+
+    void fill_normal_distribution(
+        float mean, float std_dev,
+        int n,
+        float* output // (n,)
+    ) {
+        thread_local static _random_res res;
+        std::normal_distribution<float> d{ mean, std_dev };
+        for (int i = 0; i < n; i++) {
+            output[i] = d(*res.gen);
+        }
     }
 
 }

@@ -21,11 +21,11 @@
   <ItemGroup>
     <ClInclude Include="activation.h" />
     <ClInclude Include="basic.h" />
-    <ClInclude Include="basic_layer.h" />
-    <ClInclude Include="blas.hpp" />
+    <ClInclude Include="blas.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="conv.h" />
-    <ClInclude Include="demonn_core.h" />
+    <ClInclude Include="demonn.h" />
+    <ClInclude Include="demonn_config.h" />
     <ClInclude Include="initializer.h" />
     <ClInclude Include="loss.h" />
     <ClInclude Include="tensor.hpp" />
@@ -34,7 +34,7 @@
   <ItemGroup>
     <ClCompile Include="activation.cpp" />
     <ClCompile Include="basic.cpp" />
-    <ClCompile Include="basic_layer.cpp" />
+    <ClCompile Include="blas.cpp" />
     <ClCompile Include="common.cpp" />
     <ClCompile Include="conv.cpp" />
     <ClCompile Include="initializer.cpp" />

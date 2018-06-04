@@ -1,18 +1,23 @@
-#pragma once
+﻿#pragma once
 #include "common.h"
 
-namespace demonn_core {
+namespace demonn {
 
-    EXPORT_SYMBOL void cross_entropy_forward(
-        const float* predict, int batch_size, int class_num,
-        const float* label,
-        float* output_loss // average loss of batch
+    export_symbol void op(cross_entropy, direct, forward, cpu, cpp)(
+        int batch_size,
+        int n,
+        const float* input, // (batch_size, class_num)
+        const float* label, // (batch_size, class_num)
+        float* output // (batch_size,) 
     );
 
-    EXPORT_SYMBOL void cross_entropy_backward(
-        const float* predict, int batch_size, int class_num, // predict:(batch_size, class_num)
-        const float* label, // label:(batch_size, class_num)
-        float* grad_output // grad_output:(batch_size, class_num)
+    export_symbol void op(cross_entropy, direct, backward, cpu, cpp)(
+        int batch_size,
+        int n,
+        const float* input, // (batch_size, class_num)
+        const float* label, // (batch_size, class_num)
+        const float* grad_output, // (batch_size,)
+        float* grad_input // (batch_size, class_num)
     );
 
 }

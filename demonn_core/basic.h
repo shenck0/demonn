@@ -1,36 +1,49 @@
-#pragma once
+﻿#pragma once
 #include "common.h"
 
-namespace demonn_core {
+namespace demonn {
 
-    EXPORT_SYMBOL void fully_connected_forward(
-        const float* input, int batch_size, int input_neuron, // input:(batch_size, input_neuron)
-        const float* weight, const float* bias, // weight:(input_neuron, output_neuron)
-        const float* bias_multiplier, // bias_multiplier:(batch_size)
-        float* output, int output_neuron // output:(batch_size, output_neuron)
+    export_symbol void op(fully_connected, mm, forward, cpu, mkl)(
+        int batch_size,
+        int input_neuron,
+        const float* input, // (batch_size, input_neuron)
+        int output_neuron,
+        const float* weight, // (input_neuron, output_neuron)
+        const float* bias, // (output_neuron,)
+        const float* bias_multiplier, // (batch_size,)
+        float* output // (batch_size, output_neuron)
     );
 
-    EXPORT_SYMBOL void fully_connected_backward(
-        const float* fc_input, int batch_size, int input_neuron, int output_neuron, // fc_input:(batch_size, input_neuron)
-        const float* weight, // weight:(input_neuron, output_neuron)
-        const float* bias_multiplier, // bias_multiplier:(batch_size)
-        float* bias_grad, // bias_grad:(output_neuron)
-        float* grad_weight, // grad_weight:(input_neuron, output_neuron
-        const float* grad_input, // grad_input:(batch_size, output_neuron)
-        float* grad_output // grad_output:(batch_size, input_neuron)
+    export_symbol void op(fully_connected, mm, backward, cpu, mkl)(
+        int batch_size,
+        int input_neuron,
+        int output_neuron,
+        const float* input, // (batch_size, input_neuron)
+        const float* weight, // (input_neuron, output_neuron)
+        const float* bias_multiplier, // at least:(batch_size,)
+        const float* grad_output, // (batch_size, output_neuron)
+        float* grad_bias, // (output_neuron,)
+        float* grad_weight, // (input_neuron, output_neuron)
+        float* grad_input // (batch_size, input_neuron)
     );
 
-}
+    export_symbol void op(mean, direct, forward, cpu, cpp)(
+        int count,
+        const float* input, // (count,)
+        float* output // (1,)
+    );
 
-namespace demonn_core {
+    export_symbol void op(mean, direct, backward, cpu, cpp)(
+        int count,
+        const float* grad_output, // (1,)
+        float* grad_input // (count,)
+    );
 
-    EXPORT_SYMBOL int argmax(float* arr, int n);
-
-    EXPORT_SYMBOL void onehot(const int* labels, int batch_size, int class_num,
-        float* output);
-
-    EXPORT_SYMBOL float mean(const float* arr, int count);
-
-    EXPORT_SYMBOL void set_array(float* arr, float value, int count);
+    export_symbol void op(argmax, direct, forward, cpu, cpp)(
+        int batch_size,
+        int n,
+        const float* input, // (batch_size, n)
+        int* output// (batch_size,)
+    );
 
 }

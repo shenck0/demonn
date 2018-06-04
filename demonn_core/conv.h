@@ -1,43 +1,58 @@
-#pragma once
+﻿#pragma once
 #include "common.h"
 
-namespace demonn_core {
+namespace demonn {
 
-    struct conv2d_descriptor
-    {
-        int input_channel, input_height, input_width;
+    struct export_symbol conv2d_descriptor {
+        int input_height, input_width;
+        int input_channel, output_channel;
         int filter_height, filter_width;
         int pad_top, pad_bottom, pad_left, pad_right;
         int stride_x, stride_y;
-        int output_channel;
-
+        // calculated
         int output_height, output_width;
-        int* im2col_index;
-        float* im2col_buffer;
-        int* im2col_index_pad;
-        int im2col_buffer_length;
-        int im2col_index_pad_length;
+
+        conv2d_descriptor(
+            int input_height, int input_width,
+            int input_channel, int output_channel,
+            int filter_height, int filter_width,
+            int pad_top, int pad_bottom, int pad_left, int pad_right,
+            int stride_x, int stride_y
+        );
     };
 
-    EXPORT_SYMBOL conv2d_descriptor create_conv2d_descriptor(
-        int input_channel, int input_height, int input_width,
-        int filter_height, int filter_width,
-        int output_channel,
-        int pad_top = 0, int pad_bottom = 0, int pad_left = 0, int pad_right = 0,
-        int stride_x = 1, int stride_y = 1
+    struct export_symbol conv2d_im2col_res {
+        float* im2col_buffer; // (filter_height*filter_width*input_channel, output_height*output_width)
+        int im2col_buffer_length;
+        int* im2col_index; // same size as im2col_buffer
+        int* im2col_index_pad;
+        int im2col_index_pad_length;
+        float* bias_multiplier; // at least: (output_height*output_width,)
+
+        conv2d_im2col_res(const conv2d_descriptor & desc);
+        ~conv2d_im2col_res();
+    };
+    
+    export_symbol void op(conv2d, im2col, forward, cpu, mkl)(
+        const conv2d_descriptor & desc,
+        const conv2d_im2col_res & res,
+        int batch_size,
+        const float* input, // (batch_size, input_channel, input_height, input_width)
+        const float* filter, // (output_channel, input_channel, filter_height, filter_width)
+        const float* bias, // (output_channel)
+        float* output // (batch_size, output_channel, output_height, output_width)
     );
 
-    EXPORT_SYMBOL void dispose_conv2d_descriptor(
-        conv2d_descriptor& desc
-    );
-
-    // convolution forward
-    EXPORT_SYMBOL void conv2d_forward(
-        conv2d_descriptor& desc,
-        const float* input, int batch_size, // input:(batch_size, input_channel, input_height, input_width)
-        const float* filter, const float* bias, // filter:(filter_height, filter_width), bias:(output_channel)
-        const float* bias_multiplier, // bias_multiplier:(output_height*output_width,1)
-        float* output
+    export_symbol void op(conv2d, im2col, backward, cpu, mkl)(
+        const conv2d_descriptor & desc,
+        const conv2d_im2col_res & res,
+        int batch_size,
+        const float* input, // (batch_size, input_channel, input_height, input_width)
+        const float* filter, // (output_channel, input_channel, filter_height, filter_width)
+        float* grad_output, // (batch_size, output_channel, output_height, output_width) // in-out
+        float* grad_filter, // (output_channel, input_channel, filter_height, filter_width)
+        float* grad_bias, // (output_channel)
+        float* grad_input // (batch_size, input_channel, input_height, input_width)
     );
 
 }
