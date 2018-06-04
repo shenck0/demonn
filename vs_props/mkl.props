@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <MKL_ROOT>D:\Program Files (x86)\IntelSWTools</MKL_ROOT>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludePath>$(MKL_ROOT)\compilers_and_libraries\windows\mkl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MKL_ROOT)\compilers_and_libraries\windows\mkl\lib\intel64;$(MKL_ROOT)\compilers_and_libraries\windows\compiler\lib\intel64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>mkl_intel_lp64.lib;mkl_intel_thread.lib;mkl_core.lib;libiomp5md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="MKL_ROOT">
+      <Value>$(MKL_ROOT)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

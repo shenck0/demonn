@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demonn_core", "demonn_core\demonn_core.vcxproj", "{629ADA2E-5D67-4F7B-9FFE-78A2A705900D}"
 EndProject
@@ -60,5 +60,8 @@ Global
 		{629ADA2E-5D67-4F7B-9FFE-78A2A705900D} = {975A471F-6EFC-4165-BD81-1D600810A0D2}
 		{BA4A92C0-7DEF-4B0C-AB2B-19929BE576CE} = {98C5389C-2F1F-4AD7-AEC4-52F6BCE22E7F}
 		{1F5B118A-1FD8-44DD-B49F-4F09A781294C} = {2554E60B-7B93-4674-87BB-2D15A26CFB58}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D08A0C7F-70FA-454E-B60E-DFAD8BBBAD93}
 	EndGlobalSection
 EndGlobal
